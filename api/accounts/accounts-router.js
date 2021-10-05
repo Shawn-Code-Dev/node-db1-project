@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const Accounts = require('./accounts-model')
-const { checkAccountId, checkAccountPayload } = require('./accounts-middleware')
+const { checkAccountId, checkAccountPayload, checkAccountNameUnique } = require('./accounts-middleware')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -15,9 +15,10 @@ router.get('/:id', checkAccountId, async (req, res) => {
     res.json(req.acc)
 })
 
-router.post('/', checkAccountPayload, async (req, res, next) => {
+router.post('/', checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
   try {
-
+    const acc = await Accounts.create(req.body)
+    res.status(201).json(acc)
   } catch (err) {
     next(err)
   }
