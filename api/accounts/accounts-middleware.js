@@ -43,10 +43,10 @@ exports.checkAccountId = async (req, res, next) => {
 const accSchema = yup.object().shape({
   name: yup
     .string()
-    .typeError('name of account must be a string')
     .trim()
     .min(3, 'name of account must be between 3 and 100')
     .max(100, 'name of account must be between 3 and 100')
+    .typeError('name of account must be a string')
     .required('name and budget are required'),
   budget: yup
     .number()
@@ -54,4 +54,5 @@ const accSchema = yup.object().shape({
     .min(0, 'budget of account is too large or too small')
     .max(1000000, 'budget of account is too large or too small')
     .required('name and budget are required')
+    .strict(true)
 })
